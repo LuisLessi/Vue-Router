@@ -1,8 +1,8 @@
 <template>
   <div>
-    <ContatosLista/>
+    <ContatosLista :busca="busca"/>
     <router-view/>
-    <router-view name="ContatoEditar" />
+    <router-view name="contato-detalhes" />
   </div>
 </template>
 
@@ -21,7 +21,8 @@ export default {
   },
   components: {
     ContatosLista
-  }
+  },
+  props: ['busca']
 }
 </script>
 

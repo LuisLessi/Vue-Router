@@ -1,4 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
+import ContatoEditar from '../views/Contatos/ContatoEditar.vue'
+import ContatoDetalhes from '../views/Contatos/ContatoDetalhes.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -7,22 +9,44 @@ const router = createRouter({
     {
       path: '/contatos',
       name: 'contatos',
+      alias: ['/meus-contatos', '/lista-de-contatos'],
+      props: (route) => {
+        const busca = route.query.busca
+        return busca ? { busca } : {}
+      },
       component: () => import('../views/Contatos/ContatosView.vue'),
       children: [
         {
-          path: ':id',
+          path: ':id(\\d+)',
           name: 'contatoDetalhes',
+          props: route => ({
+              id: route.params.id
+          }),
           component: () => import('../views/Contatos/ContatoDetalhes.vue')
         },
         {
-          path: ':id/editar',
+          //path: ':id(\\d+)/editar/:opcional?',
+          //path: ':id(\\d+)/editar/:zeroOuMais*',
+          path: ':id(\\d+)/editar/:umOuMais+',
           name: 'ContatoEditar',
-          component: () => import('../views/Contatos/ContatoEditar.vue')
+          alias: ':id(\\d+)/alterar',
+          components: {
+            default: ContatoEditar,
+            'contato-detalhes': ContatoDetalhes
+          },
+          props: {
+            default: true,
+            'contato-detalhes': true
+          }
         },
         {
           path: '',
           name: 'contatosHome',
           component: () => import('../views/Contatos/contatosHome.vue')
+        },
+        {
+          path: '/contatos/:pathMatch(.*)', 
+          component: () => import('../components/contatos/Error404Contatos.vue')
         },
       ]
     },
@@ -34,6 +58,10 @@ const router = createRouter({
     {
       path: '/',
       redirect: '/contatos'
+    },
+    {
+      path: '/:pathMatch(.*)*', 
+      component: () => import('../views/Error404.vue')
     },
   ]
 })

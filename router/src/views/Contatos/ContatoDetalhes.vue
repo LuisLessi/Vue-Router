@@ -8,21 +8,12 @@
 
 <script>
 export default {
-    data() {
-        return {
-            id: this.$route.params.id
+    props: {
+        id: {
+            type: Number,
+            required: true
         }
-    },
-    /*watch: {
-        '$route'(to, from) {
-            this.id = to.params.id
-        }
-    }, */
-    beforeRouteUpdate(to, from, next){
-        this.id = to.params.id
-        next()
-    },
-
+    }
 }
 </script>
 

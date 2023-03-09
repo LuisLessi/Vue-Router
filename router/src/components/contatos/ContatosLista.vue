@@ -2,12 +2,17 @@
     <div>
         <h3 class="font=weight-light">Contatos</h3>
 
-        <ul class="list-group" v-if="contatos.length > 0">
-            <ContatosListaItens
-                class="list-group-item"
-                v-for="contato in contatos" 
-                :key="contato.id"
-                :contato="contato"/>
+        <div class="form-group">
+            <input type="search" class="form-control"
+             placeholder="Buscar contatos" 
+             @keyup.enter="buscar"
+             :value="busca">
+        </div>
+
+        <hr>
+
+        <ul class="list-group" v-if="contatosFiltrados.length > 0">
+            <ContatosListaItens class="list-group-item" v-for="contato in contatosFiltrados" :key="contato.id" :contato="contato" />
         </ul>
 
         <p v-else>Nenhum contato cadastro</p>
@@ -17,6 +22,8 @@
 
 <script>
 import ContatosListaItens from './ContatosListaItens.vue';
+import router from '../../router'
+
 
 export default {
     data() {
@@ -28,13 +35,30 @@ export default {
             ]
         }
     },
+    props: ['busca'],
+
     components: {
         ContatosListaItens
     },
+    computed: {
+        contatosFiltrados() {
+            const busca = this.busca
+            return !busca
+            ? this.contatos
+            : this.contatos.filter(c => c.nome.toLowerCase().includes(busca.toLowerCase()))
+        }
+    },
     methods: {
+        buscar() {
+            router.push({
+                path: '/contatos',
+                query: { busca: event.target.value }
+            })
+        },
+
         voltar() {
             this.$router.back()
-        }
+        },
     }
 }
 </script>

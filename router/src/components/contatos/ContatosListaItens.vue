@@ -3,7 +3,7 @@
         <li>
             <span>{{ contato.nome }}</span>
              <router-link 
-            :to="{name: 'contatoDetalhes', params: { id: contato.id }}"            
+            :to="{ path: `/contatos/${contato.id}` }"            
             class="btn btn-info btn-sm float-right">Detalhes</router-link>
 
             <!--<button class="btn btn-info btn-sm float-right" @click="verDetalhes">
@@ -15,7 +15,12 @@
 
 <script>
 export default {
-    props: ['contato'],
+    props: {
+        contato: {
+            type: Object,
+            required: true
+        }
+    },
 
     methods: {
         verDetalhes() {
