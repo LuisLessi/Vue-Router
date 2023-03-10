@@ -8,8 +8,24 @@
 <script>
 export default {
     props: ['id'],
-    created(){
-        console.log('Parâmetro: ', this.$route.params)
+    data() {
+        return {
+            curso: 'Curso de vueJs'
+        }
+    },
+    beforeRouteEnter(to, from, next) {
+        /* if (to.query.autenticado === 'true') {
+              return next((vm => {
+                console.log('Curso:', vm.curso)
+              }))
+            }
+            next('/contatos')*/
+            next()
+          },
+    beforeRouteLeave(to, from, next) {
+        console.log('beforeRouteLeave')
+        const confirmar = window.confirm('Deseja sair da rota de editar ?')
+        next(confirmar)
     }
 }
 </script>

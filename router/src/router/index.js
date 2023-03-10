@@ -27,9 +27,20 @@ const router = createRouter({
         {
           //path: ':id(\\d+)/editar/:opcional?',
           //path: ':id(\\d+)/editar/:zeroOuMais*',
-          path: ':id(\\d+)/editar/:umOuMais+',
+          //path: ':id(\\d+)/editar/:umOuMais+',
+          path: ':id(\\d+)/editar',
           name: 'ContatoEditar',
           alias: ':id(\\d+)/alterar',
+          meta: { requerAutenticacao: true },
+          beforeEnter(to, from, next) {
+            console.log('beforEnter')
+            next() // continuar
+            //next(true) // continuar
+            //next(false) //bloquear
+            //next('/contatos') //redirecionar
+            //next({ name: 'contatos' }) //redirecionar
+            //next(new Error(`Permissões insuficientes para acessar o recurso ${to.fullPath}`))
+          },
           components: {
             default: ContatoEditar,
             'contato-detalhes': ContatoDetalhes
@@ -64,6 +75,24 @@ const router = createRouter({
       component: () => import('../views/Error404.vue')
     },
   ]
+})
+
+router.beforeEach((to, from, next) =>{
+  console.log('beforeEach')
+  console.log('requer autenticação ?', to.meta.requerAutenticacao)
+  next()
+})
+
+router.beforeResolve((to, from, next) => {
+  console.log('beforeResolve')
+  next()
+})
+
+router.afterEach((to, from) => {
+  console.log('afterEach')
+})
+router.onError(erro => {
+  console.log(erro)
 })
 
 export default router
